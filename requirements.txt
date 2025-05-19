@@ -1,0 +1,2 @@
+requests
+uvicorn                 # to serve the A2A Starlette app
