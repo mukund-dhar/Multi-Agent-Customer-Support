@@ -1,6 +1,4 @@
-# Customer-Support-Agent
-
-# Multi-Agent Customer Support Demo
+# Multi-Agent Customer Support
 
 **Agents**  
 - `db_tools_server.py`: MCP tool host (SQLite access)  
