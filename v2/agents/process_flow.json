@@ -1,0 +1,118 @@
+{
+  "scenarios": [
+    {
+      "id": "cancel_service_premium_offer",
+      "description": "Premium customers requesting cancellation are offered a free 1-month subscription extension.",
+      "conditions": {
+        "action": "cancel_service",
+        "customer.loyalty_tier": ["gold","platinum","diamond"]
+      },
+      "response_template": "We are sorry to see you go! As a valued {customer.loyalty_tier} member, we would like to offer you a complimentary one-month extension on your {subscription.plan} plan. Would you like to accept this offer?"
+    },
+    {
+      "id": "cancel_service_regular",
+      "description": "Regular customers requesting cancellation receive standard confirmation.",
+      "conditions": {
+        "action": "cancel_service",
+        "customer.loyalty_tier": ["regular"]
+      },
+      "response_template": "Your cancellation request for {subscription.plan} has been received. You will continue to have access until {subscription.renewal_date}. We hope to serve you again in the future."
+    },
+    {
+      "id": "order_delayed_premium_compensation",
+      "description": "Premium customers with delayed orders are offered a discount coupon.",
+      "conditions": {
+        "action": "get_order_status",
+        "order.status": ["Delayed"],
+        "customer.loyalty_tier": ["gold","platinum","diamond"]
+      },
+      "response_template": "We sincerely apologize for the delay of your order {order.id}. As a {customer.loyalty_tier} member, please accept a 10% discount on your next purchase. Would you like a coupon code sent to your email?"
+    },
+    {
+      "id": "order_delayed_regular_apology",
+      "description": "Regular customers with delayed orders receive an apology and updated ETA.",
+      "conditions": {
+        "action": "get_order_status",
+        "order.status": ["Delayed"],
+        "customer.loyalty_tier": ["regular"]
+      },
+      "response_template": "Your order {order.id} is delayed. We apologize for the inconvenience. Your updated estimated delivery date is {order.eta_date}."
+    },
+    {
+      "id": "first_order_delivered_welcome",
+      "description": "First-time customers with delivered orders receive a welcome coupon.",
+      "conditions": {
+        "action": "get_order_status",
+        "order.status": ["Delivered"],
+        "customer.total_orders": 1
+      },
+      "response_template": "Congratulations! Your first order {order.id} with us is delivered. As a welcome gift, here is a $5 coupon for your next purchase."
+    },
+    {
+      "id": "high_value_order_support_priority",
+      "description": "High-value orders receive priority support assignment.",
+      "conditions": {
+        "action": "get_order_status",
+        "order.total_amount": { "gte": 200 }
+      },
+      "response_template": "Thank you for your significant purchase of ${order.total_amount:.2f}. We have assigned a dedicated support agent to assist you with any questions regarding order {order.id}."
+    },
+    {
+      "id": "support_ticket_escalation",
+      "description": "Customers with more than 3 support tickets get escalation.",
+      "conditions": {
+        "action": "support_request",
+        "customer.support_ticket_count": { "gt": 3 }
+      },
+      "response_template": "Hello {customer.name}! We notice this is your {customer.support_ticket_count}th support request. I am escalating this to our senior support team for immediate assistance."
+    },
+    {
+      "id": "subscription_renewal_reminder",
+      "description": "Send renewal reminder for subscriptions renewing within 7 days.",
+      "conditions": {
+        "action": "subscription_status",
+        "subscription.renewal_date": { "within_days": 7 }
+      },
+      "response_template": "Your subscription for {subscription.plan} will renew on {subscription.renewal_date}. Would you like to review or change your plan before then?"
+    },
+    {
+      "id": "subscription_expired",
+      "description": "Notify customers of expired subscriptions.",
+      "conditions": {
+        "action": "subscription_status",
+        "subscription.status": ["Expired"]
+      },
+      "response_template": "Your subscription {subscription.id} expired on {subscription.renewal_date}. Let me know if you would like to renew or explore other plans."
+    },
+    {
+      "id": "subscription_check_basic",
+      "description": "Check the status of basic customer's subscription status.",
+      "conditions": {
+        "action": "subscription_status",
+        "subscription.status": ["Active"],
+        "customer.loyalty_tier": ["regular"]
+      },
+      "response_template": "Your subscription {subscription.id} is Active as of today and gets renewed on {subscription.renewal_date}. Let me know if you would like to explore your options."
+    },
+    {
+      "id": "subscription_check_gold",
+      "description": "Check the status of basic customer's subscription status.",
+      "conditions": {
+        "action": "subscription_status",
+        "subscription.status": ["Active"],
+        "customer.loyalty_tier": ["gold","platinum","diamond"]
+      },
+      "response_template": "Thank you for reaching out and being a loyal customer. Your subscription {subscription.id} is Active as of today and gets renewed on {subscription.renewal_date}. Let me know if you would like to explore your options."
+    },
+    {
+      "id": "birthday_gift_offer",
+      "description": "Offer birthday gift to premium customers on their birthday.",
+      "conditions": {
+        "action": "any",
+        "customer.birth_date": { "is_today": true },
+        "customer.loyalty_tier": ["gold","platinum","diamond"]
+      },
+      "response_template": "Happy Birthday, {customer.name}! To celebrate, we have added a birthday gift to your account — enjoy a free premium add-on for one month."
+    }
+  ]
+}
